@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "filesystem": "cpp",
+        "*.tcc": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "regex": "cpp",
+        "tuple": "cpp",
+        "typeinfo": "cpp",
+        "bitset": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "functional": "cpp",
+        "string_view": "cpp",
+        "ratio": "cpp",
+        "chrono": "cpp"
+    }
+}
