@@ -34,7 +34,7 @@ The official specifications for the deflate algorithm and for the two common fil
 
 ## The reference implementation
 
-The well known [zlib](http://zlib.net/) by Jean-loup Gailly and Mark Adler is regarded as the one true implementation and embodyment of the above mentioned standards.
+The well known [zlib](http://zlib.net/) by Jean-loup Gailly and Mark Adler is regarded as the one true implementation and embodiment of the above mentioned standards.
 
 In all the cases where the standards are hard to follow, open to several interpretations, or otherwise unclear, I have shamelessly checked how zlib handles the situation and tried to follow the example.
 
