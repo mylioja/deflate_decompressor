@@ -561,7 +561,7 @@ int DeflateDecompressor::decompress(const char* input, size_t size, std::vector<
     //  A wrapper was detected, but had problems
     if (format == Format::Invalid)
     {
-        return eINVALID_INPUT;
+        return eInvalidInput;
     }
 
     //  The gzip wrapper contains original uncompressed data size.
@@ -597,7 +597,7 @@ int DeflateDecompressor::decompress(const char* input, size_t size, std::vector<
             break;
 
         default:
-            err = eINVALID_INPUT;
+            err = eInvalidInput;
             break;
         }
 
@@ -633,17 +633,18 @@ int DeflateDecompressor::decompress(const char* input, size_t size, std::vector<
 
     if (expected != computed)
     {
-        return eCHECKSUM;
+        report_error("ERR15: Data checksum mismatch");
+        return eChecksum;
     }
 
-    return eSUCCESS;
+    return eSuccess;
 }
 
 
 int DeflateDecompressor::report_error(const char* message)
 {
     m_error_message = message;
-    return eINVALID_INPUT;
+    return eInvalidInput;
 }
 
 
@@ -721,7 +722,7 @@ DeflateDecompressor::Format DeflateDecompressor::skip_gzip_wrapper()
         uint32_t expected = read_le_uint16();
         if (expected != (computed & 0xffff))
         {
-            report_error("ERR11: Incorrect checksum  in gzip header");
+            report_error("ERR11: Incorrect checksum in gzip header");
             return Format::Invalid;
         }
     }
@@ -809,7 +810,7 @@ int DeflateDecompressor::process_uncompressed_block()
     m_out->insert(m_out->end(), m_input, m_input+len);
     m_input += len;
 
-    return eSUCCESS;
+    return eSuccess;
 }
 
 
@@ -827,7 +828,7 @@ int DeflateDecompressor::process_static_huffman_block()
 
     if (!build_decode_tables(lengths, 288, 32))
     {
-        return eINVALID_INPUT;
+        return eInvalidInput;
     }
 
     return decompress_the_block();
@@ -865,7 +866,7 @@ int DeflateDecompressor::process_dynamic_huffman_block()
         code_length_values,
         max_code_length_codewords))
     {
-        return eINVALID_INPUT;
+        return eInvalidInput;
     }
 
     //  Get the literal length and distance codeword sizes
@@ -936,7 +937,7 @@ int DeflateDecompressor::process_dynamic_huffman_block()
 
     if (!build_decode_tables(lengths, literal_length_codes, distance_codes))
     {
-        return eINVALID_INPUT;
+        return eInvalidInput;
     }
 
     return decompress_the_block();
@@ -980,7 +981,7 @@ int DeflateDecompressor::decompress_the_block()
         //  End of block
         if (entry == 0)
         {
-            return eSUCCESS;
+            return eSuccess;
         }
 
         unsigned length = entry >> data_shift;
@@ -1062,7 +1063,7 @@ int DeflateDecompressor::decompress_the_block()
         }
     }
 
-    return eSUCCESS;
+    return eSuccess;
 }
 
 

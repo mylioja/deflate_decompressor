@@ -12,24 +12,33 @@ class DeflateDecompressor
 public:
     DeflateDecompressor();
 
+    //  Possible return values for decompress.
+    //  Zero means success, anything else is an error of some sort.
+    //  Call error_message to get more detailed info.
     enum {
         //  No problems detected
-        eSUCCESS = 0,
+        eSuccess = 0,
 
         //  Checksum doesn't match
-        eCHECKSUM,
+        eChecksum,
 
         //  Some problem with the input
-        eINVALID_INPUT,
+        eInvalidInput,
     };
 
     int decompress(const char* input, size_t size, std::vector<char>& out);
 
+    //  Returns a brief description of the last error detected.
+    //  Returns nullptr in case of no errors.
     const char* error_message() const { return m_error_message; }
 
+    //  The adler32 checksum used by zlib formatted input
     static uint32_t adler32(uint32_t adler, const char* input, size_t size);
+
+    //  The crc32 checksum that gzip format uses
     static uint32_t crc32(uint32_t crc_in, const char* input, size_t size);
 
+    //  Human readable info about the build and the binary
     static const char* get_build_info();
 
 private:
